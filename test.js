@@ -1,10 +1,11 @@
 import http from 'k6/http';
 import { sleep } from 'k6';
-import {check} from 'k6';
-import papaparse from 'https://jslib.k6.io/papaparse/5.1.1/index.js';
 import crypto from 'k6/crypto';
+import apiTime from 'func-getTimeNow.js'
+import checkApiSuccess from 'func-checkApiSuccess.js'
+import { csvData } from './csvData';
 
-const csvData = papaparse.parse(open('C:\\Users\\huyen.nguyen13\\Desktop\\perfomance\\UserList.csv'), { header: true }).data;
+const csvData = papaparse.parse(open('User List-20251308211915502.csv'), { header: true }).data;
 export const options = {
   iterations: csvData.length,
 };
@@ -23,7 +24,7 @@ export const options = {
     "device_type": 5,
     "application_version": "100.0",
     "application": "tsubaki",
-    "login_time": "20250426184802",
+    "login_time": apiTime(),
     "device_name": "Web",
     "applicaton_type": 5,
     "notify_token": "",
@@ -41,7 +42,5 @@ export const options = {
 
   const res = http.post(url, payload, params);
   console.log(res.body);
-  check(res, {
-    'status is 200': (r) => r.status === 200,
-  });
+  console.log('api co success khong?', checkApiSuccess(loginRespons,"login_version_3"));
 }
