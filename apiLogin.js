@@ -6,6 +6,9 @@ import papaparse from 'https://jslib.k6.io/papaparse/5.1.1/index.js';
 import getTimeNow from './func-getTimeNow.js'
 import checkApiSuccess from './func-checkApiSuccess.js'
 
+
+let tokenList = [];
+
 const csvData = papaparse.parse(open('./User List-20251308211915502.csv'), { header: true }).data;
 export const options = {
   iterations: csvData.length,
@@ -43,8 +46,14 @@ export const options = {
   };
 
   const res = http.post(url, payload, params);
-  let apiResponseBody = JSON.parse(res.body);
-  console.log(apiResponseBody);
-  console.log(apiResponseBody.token);
+  let responseLogin = JSON.parse(res.body);
+  console.log(responseLogin);
+  console.log(responseLogin.data.token);
   console.log('api co success khong?', checkApiSuccess(res.body,"login_version_3"));
+  // Lấy token từ response
+  let token = responseLogin.data.token;
+  // Thêm token mới vào mảng
+  tokenList.push(token);
+  // Log ra để kiểm tra
+  console.log("Updated token list:", tokenList);
 }
