@@ -12,4 +12,4 @@ export default function getTimeNow(){
 	let ss = String(now.getSeconds()).padStart(2, '0');
 	return yyyy+mm+dd+hh+minute+ss;
 }
-//console.log("gio hien tai la", apiTime());
+console.log("gio hien tai la", getTimeNow());
